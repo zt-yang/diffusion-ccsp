@@ -1,0 +1,23 @@
+<robot name="textured.obj">
+	<link name="_name">
+		<visual>
+			<origin xyz="-0.033720844175476994 0.00011666205689722901 0.01432375480376277" rpy="0.0 0.0 0.0" />
+			<geometry>
+				<mesh filename="textured.obj" scale="1 1 1" />
+			</geometry>
+			<material name="texture">
+				<color rgba="1.0 1.0 1.0 1.0" />
+			</material>
+		</visual>
+		<collision>
+			<origin xyz="-0.033720844175476994 0.00011666205689722901 0.01432375480376277" rpy="0.0 0.0 0.0" />
+			<geometry>
+				<mesh filename="textured_vhacd.obj" scale="1 1 1" />
+			</geometry>
+		</collision>
+		<inertial>
+			<mass value="1.0" />
+			<inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+		</inertial>
+	</link>
+</robot>

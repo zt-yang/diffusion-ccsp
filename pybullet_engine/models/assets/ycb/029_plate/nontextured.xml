@@ -1,0 +1,8 @@
+<KinBody name="029_plate">
+  <Body type="static" name="029_plate">
+    <Geom type="trimesh">
+      <Render>./nontextured.stl</Render>
+      <Data>./nontextured.stl</Data>
+    </Geom>
+  </Body>
+</KinBody>

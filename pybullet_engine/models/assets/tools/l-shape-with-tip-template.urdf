@@ -1,0 +1,108 @@
+<?xml version="1.0" ?>
+<robot name="l-shape">
+  <link name="handle">
+    <contact>
+      <lateral_friction value="0.3"/>
+      <rolling_friction value="0.0001"/>
+      <inertia_scaling value="3.0"/>
+    </contact>
+
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0.2"/>
+      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+    </inertial>
+
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="DIMX0 DIMX1 DIMX2"/>
+      </geometry>
+      <material name="brown">
+        <color rgba="0.61176471 0.45882353 0.37254902 1"/>
+      </material>
+    </visual>
+
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="DIMX0 DIMX1 DIMX2"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="bar">
+    <contact>
+      <lateral_friction value="0.3"/>
+      <rolling_friction value="0.0001"/>
+      <inertia_scaling value="3.0"/>
+    </contact>
+
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0.2"/>
+      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+    </inertial>
+
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="DIMY0 DIMY1 DIMY2"/>
+      </geometry>
+      <material name="brown">
+        <color rgba="0.61176471 0.45882353 0.37254902 1"/>
+      </material>
+    </visual>
+
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="DIMY0 DIMY1 DIMY2"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="l-joint" type="fixed">
+    <parent link="handle"/>
+    <child link="bar"/>
+    <origin rpy="0.0 0.0 0.0" xyz="DISPY0 DISPY1 DISPY2" />
+  </joint>
+
+  <link name="bar-tip">
+    <contact>
+      <lateral_friction value="0.3"/>
+      <rolling_friction value="0.0001"/>
+      <inertia_scaling value="3.0"/>
+    </contact>
+
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0.05"/>
+      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+    </inertial>
+
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="DIMZ0 DIMZ1 DIMZ2"/>
+      </geometry>
+      <material name="brown">
+        <color rgba="0.61176471 0.45882353 0.37254902 1"/>
+      </material>
+    </visual>
+
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="DIMZ0 DIMZ1 DIMZ2"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="l-joint-tip" type="fixed">
+    <parent link="bar"/>
+    <child link="bar-tip"/>
+    <origin rpy="0.0 0.0 0.0" xyz="DISPZ0 DISPZ1 DISPZ2" />
+  </joint>
+</robot>
+

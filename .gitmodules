@@ -1,0 +1,3 @@
+[submodule "packing_models"]
+	path = packing_models
+	url = git@github.com:zt-yang/packing_models.git

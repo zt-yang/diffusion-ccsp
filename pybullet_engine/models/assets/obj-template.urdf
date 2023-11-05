@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+<robot name="obj.urdf">
+	<link name="base"/>
+	<link name="link_1">
+        <contact>
+            <lateral_friction value="LATERAL_FRICTION"/>
+            <rolling_friction value="0.0001"/>
+            <inertia_scaling value="3.0"/>
+        </contact>
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="MASS"/>
+            <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+        </inertial>
+		<visual name="body-6">
+			<origin xyz="0 0 0"/>
+			<geometry>
+				<mesh filename="MESH_FILE"/>
+			</geometry>
+            <material name="color">
+                <color rgba="COLOR0 COLOR1 COLOR2 COLOR3"/>
+            </material>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0"/>
+			<geometry>
+				<mesh filename="MESH_FILE"/>
+			</geometry>
+		</collision>
+	</link>
+	<joint name="joint_1" type="fixed">
+		<!--origin rpy="RPY0 RPY1 RPY2" xyz="XYZ0 XYZ1 XYZ2"/-->
+		<origin rpy="3.1415926535 0 -1.570796326794897" xyz="0 0 0"/>
+		<child link="link_1"/>
+		<parent link="base"/>
+	</joint>
+</robot>
