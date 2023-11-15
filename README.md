@@ -38,11 +38,18 @@ Project page: [Diffusion-CCSP](https://diffusion-ccsp.github.io/)
 ## for the first time
 mkdir data
 
-## collect data into `data/` folder, .png and .json files will be in `render/` folder
-python envs/data_collectors.py \
-  -world_name 'RandomSplitWorld' \
-  -num_worlds 10 -grid_size 0.5 -pngs -jsons
+## collect data into `data/` folder, 
+python envs/data_collectors.py -world_name 'RandomSplitWorld' -num_worlds 10 -pngs -jsons
+python envs/data_collectors.py -world_name 'RandomSplitQualitativeWorld' -num_worlds 10 -pngs -jsons
 ```
+
+<details><summary>flags</summary>
+
+* `-world_name = RandomSplitWorld | TriangularRandomSplitWorld | RandomSplitQualitativeWorld`: generates different geometric splitting datasets
+* `-num_worlds`: number of data 
+* ` -pngs | -jsons`: .png and .json files will be in `render/{dataset_name}` folder
+
+</details>
 
 ### Task 3-4: 3D & Robot Data
 

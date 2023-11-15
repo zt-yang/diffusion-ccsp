@@ -181,66 +181,93 @@ class DataCollector(object):
         print('saved', dataset_dir)
 
 
-def main(world_name='RandomSplitWorld', input_mode='diffuse_pairwise', num_worlds=10, verbose=False, num_shakes=1,
-         scene_sampler_args=dict(min_num_objects=2, max_num_objects=5), world_args=dict(), **kwargs):
+def get_data_collection_args(world_name='RandomSplitWorld', input_mode='diffuse_pairwise',
+                             num_worlds=10, verbose=False, num_shakes=1, data_type='train',
+                             min_num_objects=2, max_num_objects=5, pngs=False, jsons=False,
+                             del_if_exists=True, world_args=dict(), w=3.0, l=2.0, h=0.5, grid_size=0.5):
+
+    if 'w' in world_args:
+        w = world_args['w']
+    if 'l' in world_args:
+        l = world_args['l']
+    if 'h' in world_args:
+        h = world_args['h']
+
     parser = argparse.ArgumentParser()
     parser.add_argument('-world_name', type=str, default=world_name)
+    parser.add_argument('-data_type', type=str, default=data_type, choices=['train', 'test'])
     parser.add_argument('-input_mode', type=str, default=input_mode)
     parser.add_argument('-num_worlds', type=int, default=num_worlds)
     parser.add_argument('-num_shakes', type=int, default=num_shakes)
-    parser.add_argument('-grid_size', type=float, default=0.5)
+    parser.add_argument('-min_num_objects', type=int, default=min_num_objects)
+    parser.add_argument('-max_num_objects', type=int, default=max_num_objects)
+
+    parser.add_argument('-grid_size', type=float, default=grid_size)
+    parser.add_argument('-w', type=float, default=w)
+    parser.add_argument('-l', type=float, default=l)
+    parser.add_argument('-h', type=float, default=h)
+
     parser.add_argument('-pngs', action='store_true')
     parser.add_argument('-jsons', action='store_true')
+    parser.add_argument('-del_if_exists', action='store_true')
+
     parser.add_argument('-verbose', action='store_true', default=verbose)
     args = parser.parse_args()
 
-    if args.pngs:
-        kwargs['pngs'] = True
-    if args.jsons:
-        kwargs['jsons'] = True
+    args.pngs = pngs or args.pngs
+    args.jsons = jsons or args.jsons
+    args.del_if_exists = del_if_exists or args.del_if_exists
 
-    world_args.update(dict(
-        grid_size=args.grid_size
-    ))
+    world_args.update(dict(w=args.w, l=args.l, h=args.h, grid_size=args.grid_size))
+    args.world_args = world_args
+
+    return args
+
+
+def main(**kwargs):
+    args = get_data_collection_args(**kwargs)
+    if args.data_type == 'train':
+        generate_train_dataset(args)
+    else:
+        generate_test_dataset(args)
+
+
+def generate_train_dataset(args=None, debug=False, save_meshes=False, same_order=False, **kwargs):
+    if args is None:
+        args = get_data_collection_args(**kwargs)
+    scene_sampler_args = dict(min_num_objects=args.min_num_objects, max_num_objects=args.max_num_objects)
 
     world_class = get_world_class(args.world_name)
-    collector = DataCollector(world_class, world_args=world_args, scene_sampler_args=scene_sampler_args)
-    collector.collect(args.num_worlds, shake_per_world=args.num_shakes,
-                      label=args.input_mode+'_train', verbose=args.verbose, **kwargs)
+    collector = DataCollector(world_class, world_args=args.world_args, scene_sampler_args=scene_sampler_args)
+    collector.collect(args.num_worlds, shake_per_world=args.num_shakes, label=args.input_mode + '_train',
+                      verbose=args.verbose, pngs=args.pngs, jsons=args.jsons, debug=debug,
+                      save_meshes=save_meshes, same_order=same_order)
     # collector.collect(int(args.num_worlds/10), label='test', **kwargs)
 
 
-def generate_train_dataset(world_name, min_num_objects=2, max_num_objects=5, **kwargs):
-    main(
-        world_name=world_name,
-        # pngs=False,
-        # jsons=False,
-        del_if_exists=True,
-        verbose=False,
-        debug=False,
-        num_shakes=1,
-        scene_sampler_args=dict(
-            min_num_objects=min_num_objects,
-            max_num_objects=max_num_objects,
-        ),
-        **kwargs
-    )
-
-
-def generate_test_dataset(world_name, num_objects=range(2, 5), num_worlds=10, input_mode='diffuse_pairwise',
-                          world_args=dict(), **kwargs):
+def generate_test_dataset(args=None, pngs=True, jsons=True,
+                          save_meshes=False, same_order=False, **kwargs):
     """ Generate a set of test dataset with given number of objects in each scene
     e.g. `num_objects = range(2, 5)` creates three folders, each contains `num_worlds` with 2, 3, 4 objects
     """
-    world_class = get_world_class(world_name)
-    kwargs.update(dict(input_mode=input_mode, shake_per_world=1, pngs=True, jsons=True, verbose=False))
-    for i in num_objects:
+    if args is None:
+        if 'num_objects' in kwargs:
+            kwargs['min_num_objects'], kwargs['max_num_objects'] = kwargs.pop('num_objects')
+        args = get_data_collection_args(**kwargs)
+
+    args.pngs = pngs or args.pngs
+    args.jsons = jsons or args.jsons
+    world_class = get_world_class(args.world_name)
+    kwargs.update(dict(input_mode=args.input_mode, shake_per_world=1,
+                       pngs=args.pngs, jsons=args.jsons, verbose=False))
+    for i in range(args.min_num_objects, args.max_num_objects + 1):
         scene_sampler_args = dict(min_num_objects=i, max_num_objects=i)
-        collector = DataCollector(world_class, world_args=world_args, scene_sampler_args=scene_sampler_args)
-        collector.collect(num_worlds, label=f'{input_mode}_test_{i}_split', **kwargs)
+        collector = DataCollector(world_class, world_args=args.world_args, scene_sampler_args=scene_sampler_args)
+        collector.collect(args.num_worlds, label=f'{args.input_mode}_test_{i}_split',
+                          save_meshes=save_meshes, same_order=same_order)
 
 
-######################## CoRL ############################
+######################## tests ############################
 
 
 def test_random_split_world(n=10):
@@ -253,21 +280,21 @@ def test_random_split_world(n=10):
 def test_generate_random_split_data():
     world_class = 'RandomSplitWorld'
     test_random_split_world(n=10)
-    generate_train_dataset(world_class, num_worlds=1, min_num_objects=3, max_num_objects=3)
-    # generate_train_dataset(world_class, num_worlds=20000, min_num_objects=3, max_num_objects=6)
-    generate_test_dataset(world_class, range(3, 11), num_worlds=100)
+    generate_train_dataset(world_class=world_class, num_worlds=1, min_num_objects=3, max_num_objects=3)
+    # generate_train_dataset(world_class=world_class, num_worlds=20000, min_num_objects=3, max_num_objects=6)
+    generate_test_dataset(world_class=world_class, num_objects=range(3, 11), num_worlds=100)
 
 
 def test_generate_triangular_data():
     world_class = 'TriangularRandomSplitWorld'
     input_mode = 'diffuse_pairwise'  ## 'diffuse_pairwise_image'  ##
     kwargs = dict(world_args=dict(w=3, l=3, image_dim=64), pngs=True, jsons=True)
-    # generate_test_dataset(world_class, range(6, 7), num_worlds=5, input_mode=input_mode, save_meshes=True, **kwargs)
-    # generate_test_dataset(world_class, range(2, 7), num_worlds=10, input_mode=input_mode, **kwargs)
+    # generate_test_dataset(world_class=world_class, num_objects=range(6, 7), num_worlds=5, input_mode=input_mode, save_meshes=True, **kwargs)
+    # generate_test_dataset(world_class=world_class, num_objects=range(2, 7), num_worlds=10, input_mode=input_mode, **kwargs)
 
     kwargs.update(dict(min_num_objects=3, max_num_objects=5, input_mode=input_mode, pngs=False, jsons=False))
-    # generate_train_dataset(world_class, num_worlds=1, **kwargs)
-    generate_train_dataset(world_class, num_worlds=3000, **kwargs)
+    # generate_train_dataset(world_class=world_class, num_worlds=1, **kwargs)
+    generate_train_dataset(world_class=world_class, num_worlds=3000, **kwargs)
 
 
 def test_generate_qualitative_data():
@@ -275,9 +302,9 @@ def test_generate_qualitative_data():
     input_mode = 'qualitative'
     kwargs = dict(min_num_objects=2, max_num_objects=4, input_mode=input_mode,
                   jsons=False, pngs=False, same_order=False)
-    generate_train_dataset(world_class, num_worlds=3000, **kwargs)  ## 30000, 60000
+    generate_train_dataset(world_class=world_class, num_worlds=3000, **kwargs)  ## 30000, 60000
     # kwargs.update(jsons=True, pngs=True)
-    # generate_test_dataset(world_class, range(2, 7), num_worlds=100, **kwargs)
+    # generate_test_dataset(world_class=world_class, num_objects=range(2, 7), num_worlds=100, **kwargs)
 
 
 if __name__ == '__main__':
