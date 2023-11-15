@@ -277,13 +277,13 @@ class GaussianDiffusion(nn.Module):
         if self.EBM:
 
             def gradient_function(x, batch, t):
-                gradient = self.denoise_fn.ev[0] * self.denoise_fn(x, batch, t, eval=True) \
+                gradient = - self.denoise_fn(x, batch, t, eval=True) \
                            * self._sqrt_recipm1_alphas_cumprod_custom[t]
                 # print('gradient_function', x.shape, gradient.shape)
                 return gradient
 
             def energy_function(x, batch, t):
-                score = self.denoise_fn.ev[1] * self.denoise_fn.neg_logp_unnorm(x, batch, t, eval=True) \
+                score = - self.denoise_fn.neg_logp_unnorm(x, batch, t, eval=True) \
                         * self._sqrt_recipm1_alphas_cumprod_custom[t]
                 print('energy_function', score.shape)
                 return score

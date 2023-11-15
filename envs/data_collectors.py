@@ -288,8 +288,3 @@ if __name__ == '__main__':
         os.mkdir(RENDER_PATH)
 
     main()
-
-
-
-
-
