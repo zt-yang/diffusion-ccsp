@@ -37,6 +37,12 @@ By default, download for task `RandomSplitQualitativeWorld`. Download into `data
 python download_data_checkpoints.py
 ```
 
+## Solving CCSP
+
+```shell
+python solve_csp.py
+```
+
 ## Data Collection
 
 ### Task 1-2: 2D Tasks
@@ -71,17 +77,6 @@ python 5-panda-stability-data.py
 ```shell
 python train_ddpm.py -timesteps 1000 -EBM 'ULA+'
 ```
-
-## Solving CCSP
-
-```shell
-python solve_csp.py
-```
-
-## TODO
-
-- [ ] Upload data and checkpoints for evaluation
-- [ ] Upload packing model data
 
 ## Citation
 
