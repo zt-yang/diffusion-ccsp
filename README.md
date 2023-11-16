@@ -57,7 +57,7 @@ python envs/data_collectors.py -world_name 'RandomSplitQualitativeWorld' -data_t
 <details><summary>Some frequently used flags</summary>
 
 * `-world_name = RandomSplitWorld | TriangularRandomSplitWorld | RandomSplitQualitativeWorld`: generates different geometric splitting datasets
-* `-num_worlds`: number of data 
+* `-num_worlds`: number of data
 * `-pngs | -jsons`: .png and .json files will be in `render/{dataset_name}` folder
 
 </details>
@@ -72,10 +72,21 @@ python 3-panda-box-data.py
 python 5-panda-stability-data.py
 ```
 
+
+### Custom Task
+to add a new task
+
+1. run dataset.py to generate the pt files and try evaluation / visualization
+2. change dims in create_trainer() in train_utils.py
+3. change init() and initiate_denoise_fns() in ConstraintDiffuser class of denoise_fn.py
+3. change world.name in Trainer class of ddpm.py
+4. train with debug=True and visualize=True
+5. change wandb project name
+
 ## Training
 
 ```shell
-python train_ddpm.py -timesteps 1000 -EBM 'ULA+'
+python train_ddpm.py -timesteps 1000 -EBM 'ULA' -input_mode qualitative
 ```
 
 ## Citation

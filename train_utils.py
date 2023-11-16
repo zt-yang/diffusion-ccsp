@@ -150,8 +150,8 @@ def get_args(train_task='None', test_tasks=None, timesteps=1000, model='Diffusio
 
         if 'World' not in args.train_task:
             # args.train_task = "RandomSplitQualitativeWorld(20)_qualitative_train"
-            args.train_task = "RandomSplitQualitativeWorld(30000)_qualitative_train"  ## 60000
-            args.train_task = "RandomSplitQualitativeWorld(60000)_qualitative_train"
+            args.train_task = "RandomSplitQualitativeWorld(30000)_qualitative_train"
+            # args.train_task = "RandomSplitQualitativeWorld(60000)_qualitative_train"
 
         args.test_tasks = {i: f'RandomSplitQualitativeWorld(10)_qualitative_test_{i}_split' for i in range(2, 5)}
 
@@ -264,7 +264,7 @@ def create_trainer(args, debug=False, data_only=False, test_model=True,
 
     #### number of features for each type of variable
     if 'robot' in input_mode:
-        """ e.g., 8 numbers given in each group, but only the first 6 is used by the network, 
+        """ e.g., 8 numbers given in each group, but only the first 6 is used by the network,
             the last 2 for reconstruction """
         dims = ((8, 0, 8), (5, 10, 15), (5, 16, 21))
     elif 'stability' in input_mode or 'qualitative' in input_mode:

@@ -1,7 +1,7 @@
 numpy
 Pillow
 python-fcl
-"pyglet<2"
+
 pybullet
 pybullet-planning
 ipdb
