@@ -203,9 +203,9 @@ def get_data_collection_args(world_name='RandomSplitWorld', input_mode='diffuse_
     parser.add_argument('-max_num_objects', type=int, default=max_num_objects)
 
     parser.add_argument('-grid_size', type=float, default=grid_size)
-    parser.add_argument('-w', type=float, default=w)
-    parser.add_argument('-l', type=float, default=l)
-    parser.add_argument('-h', type=float, default=h)
+    parser.add_argument('-width', type=float, default=w)
+    parser.add_argument('-length', type=float, default=l)
+    parser.add_argument('-height', type=float, default=h)
 
     parser.add_argument('-pngs', action='store_true')
     parser.add_argument('-jsons', action='store_true')
@@ -218,7 +218,7 @@ def get_data_collection_args(world_name='RandomSplitWorld', input_mode='diffuse_
     args.jsons = jsons or args.jsons
     args.del_if_exists = del_if_exists or args.del_if_exists
 
-    world_args.update(dict(w=args.w, l=args.l, h=args.h, grid_size=args.grid_size))
+    world_args.update(dict(w=args.width, l=args.length, h=args.height, grid_size=args.grid_size))
     args.world_args = world_args
 
     return args
