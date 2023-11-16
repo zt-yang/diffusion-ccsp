@@ -237,6 +237,8 @@ def generate_train_dataset(args=None, debug=False, save_meshes=False, same_order
         args = get_data_collection_args(**kwargs)
     scene_sampler_args = dict(min_num_objects=args.min_num_objects, max_num_objects=args.max_num_objects)
 
+    print(args.pngs, args.jsons)
+
     world_class = get_world_class(args.world_name)
     collector = DataCollector(world_class, world_args=args.world_args, scene_sampler_args=scene_sampler_args)
     collector.collect(args.num_worlds, shake_per_world=args.num_shakes, label=args.input_mode + '_train',
@@ -263,7 +265,7 @@ def generate_test_dataset(args=None, pngs=True, jsons=True,
     for i in range(args.min_num_objects, args.max_num_objects + 1):
         scene_sampler_args = dict(min_num_objects=i, max_num_objects=i)
         collector = DataCollector(world_class, world_args=args.world_args, scene_sampler_args=scene_sampler_args)
-        collector.collect(args.num_worlds, label=f'{args.input_mode}_test_{i}_split',
+        collector.collect(args.num_worlds, label=f'{args.input_mode}_test_{i}_split', pngs=args.pngs, jsons=args.jsons,
                           save_meshes=save_meshes, same_order=same_order)
 
 
