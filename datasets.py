@@ -268,6 +268,12 @@ def visualize_qualitative_distribution(train_task="RandomSplitQualitativeWorld(6
     """ check data symmetry
     https://python-graph-gallery.com/80-contour-plot-with-seaborn/
     """
+
+    ## skip if already generated
+    dist_dir = join(VISUALIZATION_PATH, 'data_distribution', train_task)
+    if len([f for f in listdir(join(dist_dir)) if '.png' in f]) == 13:
+        return
+
     import seaborn as sns
     import matplotlib.pyplot as plt
     import matplotlib
@@ -288,7 +294,6 @@ def visualize_qualitative_distribution(train_task="RandomSplitQualitativeWorld(6
     counts = defaultdict(list)
     poses_data = defaultdict(list)
     total_con = 0
-    dist_dir = join(VISUALIZATION_PATH, 'data_distribution', train_task)
     os.makedirs(dist_dir, exist_ok=True)
     for data in train_dataloader:
         data = data.to('cuda')
@@ -327,6 +332,7 @@ def visualize_qualitative_distribution(train_task="RandomSplitQualitativeWorld(6
         # plt.show()
         plt.savefig(join(dist_dir, f'{k}.png'))
         plt.close()
+
 
 
 def check_enough_side_grasps(solution_json):
@@ -376,7 +382,7 @@ if __name__ == "__main__":
 
     # visualize_dataset('TableToBoxWorld(10)_train', input_mode='robot_box')
     # visualize_dataset('TableToBoxWorld(3)_test', input_mode='robot_box', visualize=True)
-    visualize_dataset('TableToBoxWorld(1)_robot_real', visualize=True)
+    # visualize_dataset('TableToBoxWorld(1)_robot_real', visualize=True)
 
     # visualize_dataset('RandomSplitWorld(1)_stability_train', input_mode='stability_flat', visualize=False)
     # visualize_dataset('RandomSplitWorld(20)_stability_train', input_mode='stability_flat', visualize=False)
@@ -387,6 +393,6 @@ if __name__ == "__main__":
     ###########################################################
 
     # check_data_distribution()
-    # visualize_qualitative_distribution()
+    visualize_qualitative_distribution()
     # visualize_packing_object_distribution()
     # visualize_qualitative_constraints_two_fold()

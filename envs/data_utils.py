@@ -218,8 +218,8 @@ def render_world(nodes, png_name='png_name', show=False, save=True, array=False,
     return world
 
 
-def render_world_from_graph(features, world_dims=(3, 2), png_name='diffusion_batch', array=False,
-                            log=False, verbose=False, **kwargs):
+def render_world_from_graph(features, world_dims=(3, 2), png_name='diffusion_batch.png',
+                            array=False, log=False, verbose=False, **kwargs):
     w_tray, l_tray = world_dims
 
     def get_node(f, typ):
