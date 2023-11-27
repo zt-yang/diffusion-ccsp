@@ -753,6 +753,6 @@ if __name__ == '__main__':
 
     train_task = "RandomSplitQualitativeWorld(30000)_qualitative_train"
     visualize_qualitative_distribution(train_task=train_task)
-    generate_qualitative_plots_one_fold(train_task=train_task, render_history=True)
+    generate_qualitative_plots_one_fold(train_task=train_task, render_history=False)
 
     # generate_qualitative_plots_two_fold()
