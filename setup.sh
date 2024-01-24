@@ -1,8 +1,8 @@
 conda activate diffusion-ccsp
-export PYTHONPATH=./networks:$PYTHONPATH
-export PYTHONPATH=./envs:$PYTHONPATH
-export PYTHONPATH=./packing_models:$PYTHONPATH
-export PYTHONPATH=./:$PYTHONPATH
+export PYTHONPATH=${PWD}/networks:$PYTHONPATH
+export PYTHONPATH=${PWD}/envs:$PYTHONPATH
+export PYTHONPATH=${PWD}/packing_models:$PYTHONPATH
+export PYTHONPATH=${PWD}/:$PYTHONPATH
 
-## for Yang's machine, change to your path to Jacinle
-export PYTHONPATH=~/Documents/playground/Jacinle:$PYTHONPATH
+## by default sharing the same parent folder as Jacinle
+export PYTHONPATH=${PWD}/../Jacinle:$PYTHONPATH

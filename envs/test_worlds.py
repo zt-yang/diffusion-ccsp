@@ -1,3 +1,4 @@
+from os.path import dirname, join
 import matplotlib.pyplot as plt
 
 from worlds import *
@@ -11,6 +12,10 @@ if seed is None:
 random.seed(seed)
 np.random.seed(seed % (2**32))
 print('Seed:', seed)
+
+RENDER_PATH = join(dirname(__file__), '..', 'renders')
+if not isdir(RENDER_PATH):
+    os.mkdir(RENDER_PATH)
 
 
 def test_shape_setting_world():
@@ -201,9 +206,8 @@ if __name__ == '__main__':
     # test_random_split_world()
     # test_shake_worlds()
     # test_triangular_split_world()
-    # test_3d_box_split_world()
+    test_3d_box_split_world()
     # test_robot_world()
     # test_qualitative_traj()
     # test_qualitative_world()
-    visualize_qualitative_constraints()
-
+    # visualize_qualitative_constraints()

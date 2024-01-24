@@ -1,4 +1,5 @@
-__pycache__/
+**/__pycache__/
+*.so
 .idea/
 
 data/
@@ -18,3 +19,6 @@ visualizations/
 *.zip
 *.mp4
 *.ply
+
+pybullet_engine/ikfast/franka_panda/*.so
+pybullet_engine/ikfast/franka_panda/ikfast_panda_arm.cpython-39-x86_64-linux-gnu.so
